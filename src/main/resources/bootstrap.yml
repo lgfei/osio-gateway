@@ -13,6 +13,9 @@ management:
     web: 
       exposure: 
         include: "*"
+  info:
+    env:
+      enabled: true
 
 eureka:
   instance:
@@ -26,11 +29,15 @@ eureka:
     metadata-map:
       VERSION: 0.0.1-SNAPSHOT
   client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
+    serviceUrl:
       # 注册中心地址
       defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:7001/eureka}
     # 拉取服务列表间隔时间
     registryFetchIntervalSeconds: 3
     disable-delta: true
+
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:7003

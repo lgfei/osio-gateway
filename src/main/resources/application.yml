@@ -1,3 +1,38 @@
 spring:
   application:
     name: osio-gateway
+  main:
+    #因为Gateway不支持SpringMVC，所以要么加上这个配置，要么pom.xml注释掉spring-boot-starter-web
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - AddResponseHeader=Access-Control-Allow-Origin, *
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowCredentials: true
+            #allowedOrigins: "*"
+            allowedOriginPatterns: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+        add-to-simple-url-handler-mapping: true
+      routes:
+        - id: osio-admin
+          uri: lb://osio-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+        - id: osio-oauth
+          uri: lb://osio-oauth
+          predicates:
+            - Path=/oauth/**
+          filters:
+            - StripPrefix=1
