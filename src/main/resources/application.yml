@@ -36,3 +36,9 @@ spring:
             - Path=/oauth/**
           filters:
             - StripPrefix=1
+        - id: osio-file
+          uri: lb://osio-file
+          predicates:
+            - Path=/file/**
+          filters:
+            - StripPrefix=1
